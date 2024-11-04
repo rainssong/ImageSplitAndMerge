@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图片编辑工具</title>
+    <title>图片拼裁工具</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue@3.3.0/dist/vue.global.min.js"></script>
     <style>
@@ -33,11 +33,15 @@
     <h1 class="text-center">图片拼裁工具</h1>
     <p class="text-center text-muted">选择多张图片，点击任意位置裁切，支持上下移动和删除图片。导出时自动合并。</p>
     <p class="text-center text-muted">Author:Rainssong</p>
+    <p class="text-center text-muted">主页：<a href="https://rainssong.com">www.rainssong.com</a></p>
 
     <!-- 上传按钮 -->
     <div class="mb-3">
         <input type="file" multiple @change="handleUpload" accept="image/*" class="form-control" />
-        <button class="btn btn-success mt-2" @click="exportImages">导出图片</button>
+        <div class="mt-2">
+            <button class="btn btn-success me-2" @click="exportMergedImage">合并导出</button>
+            <button class="btn btn-primary" @click="exportSeparateImages">单独导出</button>
+        </div>
     </div>
 
     <!-- 编辑器 -->
@@ -136,7 +140,7 @@
                     this.images.splice(index + 1, 0, temp);
                 }
             },
-            exportImages() {
+            exportMergedImage() {
                 const canvas = document.createElement('canvas');
                 const context = canvas.getContext('2d');
 
@@ -167,6 +171,14 @@
                         link.download = 'merged_image.png';
                         link.click();
                     });
+                });
+            },
+            exportSeparateImages() {
+                this.images.forEach((img, index) => {
+                    const link = document.createElement('a');
+                    link.href = img.src;
+                    link.download = `image_${index + 1}.png`;
+                    link.click();
                 });
             }
         }
