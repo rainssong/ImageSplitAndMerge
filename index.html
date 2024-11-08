@@ -47,7 +47,11 @@
         }
 
         .horizontal-layout .image-container {
+            display: inline-block;
             margin-right: 10px;
+            vertical-align: top;
+            white-space: normal;
+            height: 640px;
         }
 
         .horizontal-layout .image-container:last-child {
@@ -58,6 +62,16 @@
             position: relative;
             width: 100%;
             height: 100%;
+        }
+
+        .horizontal-layout .image-wrapper {
+            height: 100%;
+        }
+
+        .horizontal-layout img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
         }
 
         .zoom-controls {
@@ -80,6 +94,30 @@
             background: rgba(255, 255, 255, 0.8);
             border-radius: 0 0 0 5px;
         }
+
+        .horizontal-layout {
+            overflow-x: auto !important;
+            overflow-y: hidden;
+            white-space: nowrap;
+            padding-bottom: 20px;
+        }
+
+        .horizontal-layout::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .horizontal-layout::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .horizontal-layout::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .horizontal-layout::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
     </style>
 </head>
 
@@ -88,7 +126,7 @@
 
 
         <h1 class="text-center">图片拼裁工具</h1>
-        <p class="text-center text-muted">���择多张图片，点击任意位置裁切，支持上下移动和删除图片。导出时自动合并。</p>
+        <p class="text-center text-muted">择多张图片，点击任意位置裁切，支持上下移动和删除图片。导出时自动合并。</p>
         <p class="text-center text-muted">Author:Rainssong</p>
         <p class="text-center text-muted">主页：<a href="https://rainssong.com">www.rainssong.com</a></p>
 
@@ -107,7 +145,9 @@
 
         <!-- 编辑器 -->
         <div class="editor" :class="{ 'horizontal-layout': !isVertical }" :style="containerStyle">
-            <div v-for="(img, index) in images" :key="index" class="image-container mb-3">
+            <div v-for="(img, index) in images" :key="index" 
+                 class="image-container mb-3"
+                 :style="!isVertical ? { height: imageHeight } : {}">
                 <div class="image-wrapper">
                     <img :src="img.src" @click="splitImage(index, $event)" 
                          @mousemove="showCutLine($event, index)" 

@@ -12,14 +12,25 @@ Vue.createApp({
             const baseWidth = this.isVertical ? 1000 : 300;
             return `${baseWidth * (this.zoomLevel / 100)}px`;
         },
+        imageHeight() {
+            return `${640 * (this.zoomLevel / 100)}px`;
+        },
         containerStyle() {
-            return {
-                display: this.isVertical ? 'block' : 'flex',
-                flexWrap: 'nowrap',
-                overflowX: this.isVertical ? 'hidden' : 'auto',
-                overflowY: 'hidden',
-                width: this.isVertical ? this.imageWidth : '100%'
-            };
+            if (this.isVertical) {
+                return {
+                    display: 'block',
+                    width: this.imageWidth,
+                    overflowX: 'hidden',
+                    overflowY: 'hidden'
+                };
+            } else {
+                return {
+                    display: 'block',
+                    width: '100%',
+                    overflowX: 'auto',
+                    overflowY: 'hidden'
+                };
+            }
         }
     },
     methods: {
