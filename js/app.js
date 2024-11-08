@@ -166,7 +166,7 @@ Vue.createApp({
             this.images.forEach((img, index) => {
                 const link = document.createElement('a');
                 link.href = img.src;
-                link.download = `image_${index + 1}.png`;
+                link.download = `SplitAndMerge_${index + 1}.png`;
                 link.click();
             });
         },
