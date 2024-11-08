@@ -157,47 +157,10 @@ Vue.createApp({
             }
         },
         exportMergedImage() {
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-
-            const imagePromises = this.images.map(img => new Promise(resolve => {
-                const image = new Image();
-                image.src = img.src;
-                image.onload = () => resolve(image);
-            }));
-
-            Promise.all(imagePromises).then(loadedImages => {
-                if (this.isVertical) {
-                    const maxWidth = Math.max(...loadedImages.map(img => img.width));
-                    const totalHeight = loadedImages.reduce((sum, img) => sum + img.height, 0);
-                    canvas.width = maxWidth;
-                    canvas.height = totalHeight;
-
-                    let currentHeight = 0;
-                    loadedImages.forEach(img => {
-                        context.drawImage(img, 0, currentHeight, img.width, img.height);
-                        currentHeight += img.height;
-                    });
-                } else {
-                    const maxHeight = Math.max(...loadedImages.map(img => img.height));
-                    const totalWidth = loadedImages.reduce((sum, img) => sum + img.width, 0);
-                    canvas.width = totalWidth;
-                    canvas.height = maxHeight;
-
-                    let currentWidth = 0;
-                    loadedImages.forEach(img => {
-                        context.drawImage(img, currentWidth, 0, img.width, img.height);
-                        currentWidth += img.width;
-                    });
-                }
-
-                canvas.toBlob(blob => {
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = 'merged_image.png';
-                    link.click();
-                });
-            });
+            this.mergeImages();
+            setTimeout(() => {
+                this.exportSeparateImages();
+            }, 100);
         },
         exportSeparateImages() {
             this.images.forEach((img, index) => {
